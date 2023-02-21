@@ -50,6 +50,7 @@ end;
 
 procedure TfrmActivityDetails.FormShow(Sender: TObject);
 begin
+  Self.Caption := TCategoryNames[Category] + ' - Definir atividade';
   FPreviousActivitiesDescriptions.DelimitedText := IniFile.ReadString('TfrmActivityDetails', 'PreviousActivities.' + TCategoryNames[Category], EmptyStr);
   cbxDescription.Items.Clear;
   cbxDescription.Items.AddStrings(FPreviousActivitiesDescriptions);
@@ -67,11 +68,14 @@ begin
 end;
 
 procedure TfrmActivityDetails.SaveSettings;
+var
+  cbxDescriptionTextIndex: Integer;
 const
   ArbitraryCbxLimit = 15;
 begin
-  if FPreviousActivitiesDescriptions.IndexOf(cbxDescription.Text) >= 0 then
-    Exit;
+  cbxDescriptionTextIndex := FPreviousActivitiesDescriptions.IndexOf(cbxDescription.Text);
+  if cbxDescriptionTextIndex >= 0 then
+    FPreviousActivitiesDescriptions.Delete(cbxDescriptionTextIndex);
 
   FPreviousActivitiesDescriptions.Insert(0, cbxDescription.Text);
   if FPreviousActivitiesDescriptions.Count > ArbitraryCbxLimit then
